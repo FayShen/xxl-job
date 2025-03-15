@@ -25,6 +25,18 @@
 	    <section class="content">
 
             <div class="row">
+
+                <div class="col-xs-3">
+                    <div class="input-group">
+                        <span class="input-group-addon">${I18n.namespace_field_name}</span>
+                        <select class="form-control" id="namespace_select">
+                            <#list namespaceList as row>
+                                <option value="${row.namespace}" <#if namespace==row.namespace>selected</#if> >${row.namespace}</option>
+                            </#list>
+                        </select>
+                    </div>
+                </div>
+
                 <div class="col-xs-3">
                     <div class="input-group">
                         <span class="input-group-addon">AppName</span>
@@ -98,6 +110,12 @@
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal form" role="form" >
+                        <div class="form-group">
+                            <label for="lastname" class="col-sm-2 control-label">${I18n.namespace_field_name}<font color="red">*</font></label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="namespace" value="${namespace}" readonly />
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label for="lastname" class="col-sm-2 control-label">AppName<font color="red">*</font></label>
                             <div class="col-sm-10"><input type="text" class="form-control" name="appname" placeholder="${I18n.system_please_input}AppName" maxlength="64" ></div>

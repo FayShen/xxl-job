@@ -1,11 +1,14 @@
 package com.xxl.job.admin.controller;
 
 import com.xxl.job.admin.controller.annotation.PermissionLimit;
+import com.xxl.job.admin.core.exception.XxlJobException;
 import com.xxl.job.admin.core.model.XxlJobGroup;
+import com.xxl.job.admin.core.model.XxlJobNamespace;
 import com.xxl.job.admin.core.model.XxlJobRegistry;
 import com.xxl.job.admin.core.util.I18nUtil;
 import com.xxl.job.admin.dao.XxlJobGroupDao;
 import com.xxl.job.admin.dao.XxlJobInfoDao;
+import com.xxl.job.admin.dao.XxlJobNamespaceDao;
 import com.xxl.job.admin.dao.XxlJobRegistryDao;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.enums.RegistryConfig;
@@ -13,6 +16,7 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,9 +38,18 @@ public class JobGroupController {
 	@Resource
 	private XxlJobRegistryDao xxlJobRegistryDao;
 
+	@Resource
+	private XxlJobNamespaceDao xxlJobNamespaceDao;
+
 	@RequestMapping
 	@PermissionLimit(adminuser = true)
-	public String index(Model model) {
+	public String index(Model model, @RequestParam(defaultValue = "default") String namespace) {
+		if (!StringUtils.hasText(namespace)) {
+			namespace = "default";
+		}
+		List<XxlJobNamespace> namespaces = xxlJobNamespaceDao.selectAllNamespace();
+		model.addAttribute("namespaceList", namespaces);
+		model.addAttribute("namespace", namespace);
 		return "jobgroup/jobgroup.index";
 	}
 
@@ -47,11 +60,15 @@ public class JobGroupController {
 										@RequestParam(value = "start", required = false, defaultValue = "0") int start,
 										@RequestParam(value = "length", required = false, defaultValue = "10") int length,
 										@RequestParam("appname") String appname,
-										@RequestParam("title") String title) {
+										@RequestParam("title") String title,
+										@RequestParam(value = "namespace", defaultValue = "default") String namespace) {
+		if (!StringUtils.hasText(namespace)) {
+			throw new XxlJobException("namespace" + I18nUtil.getString("namespace_empty"));
+		}
 
 		// page query
-		List<XxlJobGroup> list = xxlJobGroupDao.pageList(start, length, appname, title);
-		int list_count = xxlJobGroupDao.pageListCount(start, length, appname, title);
+		List<XxlJobGroup> list = xxlJobGroupDao.pageList(start, length, appname, title, namespace);
+		int list_count = xxlJobGroupDao.pageListCount(start, length, appname, title, namespace);
 
 		// package result
 		Map<String, Object> maps = new HashMap<String, Object>();
@@ -67,6 +84,10 @@ public class JobGroupController {
 	public ReturnT<String> save(XxlJobGroup xxlJobGroup){
 
 		// valid
+		if (!StringUtils.hasText(xxlJobGroup.getNamespace())) {
+			return new ReturnT<String>(500, (I18nUtil.getString("namespace_empty")));
+		}
+
 		if (xxlJobGroup.getAppname()==null || xxlJobGroup.getAppname().trim().length()==0) {
 			return new ReturnT<String>(500, (I18nUtil.getString("system_please_input")+"AppName") );
 		}
@@ -180,13 +201,13 @@ public class JobGroupController {
 	public ReturnT<String> remove(@RequestParam("id") int id){
 
 		// valid
-		int count = xxlJobInfoDao.pageListCount(0, 10, id, -1,  null, null, null);
+		int count = xxlJobInfoDao.pageListCount(0, 10, id, -1,  null, null, null, null);
 		if (count > 0) {
 			return new ReturnT<String>(500, I18nUtil.getString("jobgroup_del_limit_0") );
 		}
 
-		List<XxlJobGroup> allList = xxlJobGroupDao.findAll();
-		if (allList.size() == 1) {
+		int countSameSpace = xxlJobGroupDao.selectCountOfNamespaceById(id);
+		if (countSameSpace == 1) {
 			return new ReturnT<String>(500, I18nUtil.getString("jobgroup_del_limit_1") );
 		}
 

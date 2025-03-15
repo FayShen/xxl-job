@@ -14,6 +14,7 @@ $(function() {
 				obj.title = $('#title').val();
 				obj.start = d.start;
 				obj.length = d.length;
+				obj.namespace = $('#namespace_select').val();
 				return obj;
 			}
 		},
@@ -112,6 +113,11 @@ $(function() {
 
 	// table data
 	var tableData = {};
+
+	$('#namespace_select').change(function () {
+		const namespace = $('#namespace_select').val();
+		window.location.href = base_url + "/jobgroup?namespace=" + namespace;
+	})
 
 	// search btn
 	$('#searchBtn').on('click', function(){

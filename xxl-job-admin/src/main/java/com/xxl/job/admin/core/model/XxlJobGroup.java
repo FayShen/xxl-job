@@ -17,6 +17,11 @@ public class XxlJobGroup {
     private String addressList;     // 执行器地址列表，多地址逗号分隔(手动录入)
     private Date updateTime;
 
+    /**
+     * 命名空间
+     */
+    private String namespace;
+
     // registry list
     private List<String> registryList;  // 执行器地址列表(系统注册)
     public List<String> getRegistryList() {
@@ -74,4 +79,15 @@ public class XxlJobGroup {
         this.addressList = addressList;
     }
 
+    public String getNamespace() {
+        return namespace;
+    }
+
+    public void setNamespace(String namespace) {
+        this.namespace = namespace;
+    }
+
+    public void setRegistryList(List<String> registryList) {
+        this.registryList = registryList;
+    }
 }

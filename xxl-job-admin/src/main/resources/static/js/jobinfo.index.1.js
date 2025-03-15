@@ -17,6 +17,7 @@ $(function() {
                 obj.author = $('#author').val();
 	        	obj.start = d.start;
 	        	obj.length = d.length;
+				obj.namespace = $('#namespace').val();
                 return obj;
             }
 	    },
@@ -202,8 +203,16 @@ $(function() {
 	$('#jobGroup').on('change', function(){
         //reload
         var jobGroup = $('#jobGroup').val();
-        window.location.href = base_url + "/jobinfo?jobGroup=" + jobGroup;
+		var namespace = $('#namespaceSelect').val();
+        window.location.href = base_url + "/jobinfo?jobGroup=" + jobGroup + "&namespace=" + namespace;
     });
+
+	// jobGroup change
+	$('#namespaceSelect').on('change', function(){
+		//reload
+		var namespace = $('#namespaceSelect').val();
+		window.location.href = base_url + "/jobinfo?namespace=" + namespace;
+	});
 
 	// job operate
 	$("#job_list").on('click', '.job_operate',function() {
@@ -455,6 +464,7 @@ $(function() {
 				scheduleConf = $("#addModal .form input[name='schedule_conf_FIX_DELAY']").val();
 			}
 			$("#addModal .form input[name='scheduleConf']").val( scheduleConf );
+			console.log($("#addModal .form"))
 
         	$.post(base_url + "/jobinfo/add",  $("#addModal .form").serialize(), function(data, status) {
     			if (data.code == "200") {
@@ -538,6 +548,7 @@ $(function() {
 
 		// fill base
 		$("#updateModal .form input[name='id']").val( row.id );
+		$("#updateModal .form select[name=namespace] option[value=" + row.namespace +"]").prop('selected', true);
 		$('#updateModal .form select[name=jobGroup] option[value='+ row.jobGroup +']').prop('selected', true);
 		$("#updateModal .form input[name='jobDesc']").val( row.jobDesc );
 		$("#updateModal .form input[name='author']").val( row.author );

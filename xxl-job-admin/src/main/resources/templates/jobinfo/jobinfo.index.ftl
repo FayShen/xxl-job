@@ -25,7 +25,19 @@
 	    <section class="content">
 	    
 	    	<div class="row">
-	    		<div class="col-xs-3">
+
+                <div class="col-xs-2">
+                    <div class="input-group">
+                        <span class="input-group-addon">${I18n.namespace_field_name}</span>
+                        <select class="form-control" id="namespaceSelect" >
+                            <#list namespaceList as row>
+                                <option value="${row.namespace}" <#if namespace == row.namespace>selected</#if> >${row.namespace}</option>
+                            </#list>
+                        </select>
+                    </div>
+                </div>
+
+	    		<div class="col-xs-2">
 	              	<div class="input-group">
 	                	<span class="input-group-addon">${I18n.jobinfo_field_jobgroup}</span>
                 		<select class="form-control" id="jobGroup" >
@@ -49,12 +61,12 @@
                         <input type="text" class="form-control" id="jobDesc" placeholder="${I18n.system_please_input}${I18n.jobinfo_field_jobdesc}" >
                     </div>
                 </div>
-                <div class="col-xs-2">
+                <div class="col-xs-1">
                     <div class="input-group">
                         <input type="text" class="form-control" id="executorHandler" placeholder="${I18n.system_please_input}JobHandler" >
                     </div>
                 </div>
-                <div class="col-xs-2">
+                <div class="col-xs-1">
                     <div class="input-group">
                         <input type="text" class="form-control" id="author" placeholder="${I18n.system_please_input}${I18n.jobinfo_field_author}" >
                     </div>
@@ -116,6 +128,13 @@
 				<form class="form-horizontal form" role="form" >
 
                     <p style="margin: 0 0 10px;text-align: left;border-bottom: 1px solid #e5e5e5;color: gray;">${I18n.jobinfo_conf_base}</p>    <#-- 基础信息 -->
+                    <div class="form-group">
+                        <label for="firstname" class="col-sm-2 control-label">${I18n.namespace_field_name}<font color="red">*</font></label>
+                        <div class="col-sm-4">
+                            <input type="text" name="namespace" value="${namespace}" readonly>
+                        </div>
+
+                    </div>
 					<div class="form-group">
 						<label for="firstname" class="col-sm-2 control-label">${I18n.jobinfo_field_jobgroup}<font color="red">*</font></label>
 						<div class="col-sm-4">
@@ -361,6 +380,18 @@ exit 0
 				<form class="form-horizontal form" role="form" >
 
                     <p style="margin: 0 0 10px;text-align: left;border-bottom: 1px solid #e5e5e5;color: gray;">${I18n.jobinfo_conf_base}</p>    <#-- 基础信息 -->
+                    <div class="form-group">
+                        <label for="firstname" class="col-sm-2 control-label">${I18n.namespace_field_name}<font color="red">*</font></label>
+                        <div class="col-sm-4">
+                            <select class="form-control" name="namespace" disabled>
+                                <#list namespaceList as row>
+                                    <option value="${row.namespace}" >${row.namespace}</option>
+                                </#list>
+                            </select>
+                        </div>
+
+                    </div>
+
                     <div class="form-group">
                         <label for="firstname" class="col-sm-2 control-label">${I18n.jobinfo_field_jobgroup}<font color="red">*</font></label>
                         <div class="col-sm-4">

@@ -4,6 +4,7 @@ import com.xxl.job.admin.controller.interceptor.PermissionInterceptor;
 import com.xxl.job.admin.core.exception.XxlJobException;
 import com.xxl.job.admin.core.model.XxlJobGroup;
 import com.xxl.job.admin.core.model.XxlJobInfo;
+import com.xxl.job.admin.core.model.XxlJobNamespace;
 import com.xxl.job.admin.core.model.XxlJobUser;
 import com.xxl.job.admin.core.route.ExecutorRouteStrategyEnum;
 import com.xxl.job.admin.core.scheduler.MisfireStrategyEnum;
@@ -11,6 +12,7 @@ import com.xxl.job.admin.core.scheduler.ScheduleTypeEnum;
 import com.xxl.job.admin.core.thread.JobScheduleHelper;
 import com.xxl.job.admin.core.util.I18nUtil;
 import com.xxl.job.admin.dao.XxlJobGroupDao;
+import com.xxl.job.admin.dao.XxlJobNamespaceDao;
 import com.xxl.job.admin.service.XxlJobService;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.enums.ExecutorBlockStrategyEnum;
@@ -22,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -41,9 +44,17 @@ public class JobInfoController {
 	private XxlJobGroupDao xxlJobGroupDao;
 	@Resource
 	private XxlJobService xxlJobService;
+
+	@Resource
+	private XxlJobNamespaceDao xxlJobNamespaceDao;
 	
 	@RequestMapping
-	public String index(HttpServletRequest request, Model model, @RequestParam(value = "jobGroup", required = false, defaultValue = "-1") int jobGroup) {
+	public String index(HttpServletRequest request, Model model, @RequestParam(value = "jobGroup", required = false, defaultValue = "-1") int jobGroup,
+						@RequestParam(defaultValue = "default") String namespace) {
+
+		if (StringUtils.hasText(namespace)) {
+			namespace = "default";
+		}
 
 		// 枚举-字典
 		model.addAttribute("ExecutorRouteStrategyEnum", ExecutorRouteStrategyEnum.values());	    // 路由策略-列表
@@ -52,8 +63,13 @@ public class JobInfoController {
 		model.addAttribute("ScheduleTypeEnum", ScheduleTypeEnum.values());	    				// 调度类型
 		model.addAttribute("MisfireStrategyEnum", MisfireStrategyEnum.values());	    			// 调度过期策略
 
+		//命名空间
+		model.addAttribute("namespace", namespace);
+
 		// 执行器列表
-		List<XxlJobGroup> jobGroupList_all =  xxlJobGroupDao.findAll();
+		List<XxlJobGroup> jobGroupList_all =  xxlJobGroupDao.selectByNamespace(namespace);
+
+		List<XxlJobNamespace> namespaces = xxlJobNamespaceDao.selectAllNamespace();
 
 		// filter group
 		List<XxlJobGroup> jobGroupList = PermissionInterceptor.filterJobGroupByRole(request, jobGroupList_all);
@@ -63,6 +79,7 @@ public class JobInfoController {
 
 		model.addAttribute("JobGroupList", jobGroupList);
 		model.addAttribute("jobGroup", jobGroup);
+		model.addAttribute("namespaceList", namespaces);
 
 		return "jobinfo/jobinfo.index";
 	}
@@ -75,9 +92,10 @@ public class JobInfoController {
 										@RequestParam("triggerStatus") int triggerStatus,
 										@RequestParam("jobDesc") String jobDesc,
 										@RequestParam("executorHandler") String executorHandler,
-										@RequestParam("author") String author) {
+										@RequestParam("author") String author,
+										@RequestParam(value = "namespace", required = false) String namespace) {
 		
-		return xxlJobService.pageList(start, length, jobGroup, triggerStatus, jobDesc, executorHandler, author);
+		return xxlJobService.pageList(start, length, jobGroup, triggerStatus, jobDesc, executorHandler, author, namespace);
 	}
 	
 	@RequestMapping("/add")

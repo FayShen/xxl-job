@@ -42,6 +42,18 @@ public class XxlJobInfo {
 	private long triggerLastTime;	// 上次调度时间
 	private long triggerNextTime;	// 下次调度时间
 
+	/**
+	 * 命名空间
+	 */
+	private String namespace;
+
+	public String getNamespace() {
+		return namespace;
+	}
+
+	public void setNamespace(String namespace) {
+		this.namespace = namespace;
+	}
 
 	public int getId() {
 		return id;

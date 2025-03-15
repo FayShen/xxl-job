@@ -10,6 +10,7 @@
 		<result column="address_type" property="addressType" />
 		<result column="address_list" property="addressList" />
 		<result column="update_time" property="updateTime" />
+		<result column="namespace" property="namespace" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
@@ -18,7 +19,8 @@
 		t.title,
 		t.address_type,
 		t.address_list,
-		t.update_time
+		t.update_time,
+		t.namespace
 	</sql>
 
 	<select id="findAll" resultMap="XxlJobGroup">
@@ -35,8 +37,8 @@
 	</select>
 
 	<insert id="save" parameterType="com.xxl.job.admin.core.model.XxlJobGroup" useGeneratedKeys="true" keyProperty="id" >
-		INSERT INTO xxl_job_group ( `app_name`, `title`, `address_type`, `address_list`, `update_time`)
-		values ( #{appname}, #{title}, #{addressType}, #{addressList}, #{updateTime} );
+		INSERT INTO xxl_job_group ( `app_name`, `title`, `address_type`, `address_list`, `update_time`, `namespace`)
+		values ( #{appname}, #{title}, #{addressType}, #{addressList}, #{updateTime}, #{namespace} );
 	</insert>
 
 	<update id="update" parameterType="com.xxl.job.admin.core.model.XxlJobGroup" >
@@ -70,6 +72,7 @@
 			<if test="title != null and title != ''">
 				AND t.title like CONCAT(CONCAT('%', #{title}), '%')
 			</if>
+			AND t.namespace = #{namespace}
 		</trim>
 		ORDER BY t.app_name, t.title, t.id ASC
 		LIMIT #{offset}, #{pagesize}
@@ -85,7 +88,14 @@
 			<if test="title != null and title != ''">
 				AND t.title like CONCAT(CONCAT('%', #{title}), '%')
 			</if>
+			AND t.namespace = #{namespace}
 		</trim>
 	</select>
 
+	<select id="selectCountOfNamespaceById" resultType="int">
+		select count(*) from xxl_job_group
+		where namespace = (select namespace from xxl_job_group where id = #{id})
+		  and id != #{id}
+
+	</select>
 </mapper>
