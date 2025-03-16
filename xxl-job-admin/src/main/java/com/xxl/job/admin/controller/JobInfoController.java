@@ -52,7 +52,7 @@ public class JobInfoController {
 	public String index(HttpServletRequest request, Model model, @RequestParam(value = "jobGroup", required = false, defaultValue = "-1") int jobGroup,
 						@RequestParam(defaultValue = "default") String namespace) {
 
-		if (StringUtils.hasText(namespace)) {
+		if (!StringUtils.hasText(namespace)) {
 			namespace = "default";
 		}
 

@@ -34,6 +34,11 @@ public class XxlJobLog {
 	// alarm info
 	private int alarmStatus;
 
+	/**
+	 * 命名空间
+	 */
+	private String namespace;
+
 	public long getId() {
 		return id;
 	}
@@ -154,4 +159,11 @@ public class XxlJobLog {
 		this.alarmStatus = alarmStatus;
 	}
 
+	public String getNamespace() {
+		return namespace;
+	}
+
+	public void setNamespace(String namespace) {
+		this.namespace = namespace;
+	}
 }

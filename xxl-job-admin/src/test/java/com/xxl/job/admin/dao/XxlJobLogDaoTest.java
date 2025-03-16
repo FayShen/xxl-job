@@ -16,12 +16,13 @@ public class XxlJobLogDaoTest {
 
     @Test
     public void test(){
-        List<XxlJobLog> list = xxlJobLogDao.pageList(0, 10, 1, 1, null, null, 1);
-        int list_count = xxlJobLogDao.pageListCount(0, 10, 1, 1, null, null, 1);
+        List<XxlJobLog> list = xxlJobLogDao.pageList(0, 10, 1, 1, null, null, 1, null);
+        int list_count = xxlJobLogDao.pageListCount(0, 10, 1, 1, null, null, 1, null);
 
         XxlJobLog log = new XxlJobLog();
         log.setJobGroup(1);
         log.setJobId(1);
+        log.setNamespace("default");
 
         long ret1 = xxlJobLogDao.save(log);
         XxlJobLog dto = xxlJobLogDao.load(log.getId());
@@ -43,7 +44,7 @@ public class XxlJobLogDaoTest {
         dto = xxlJobLogDao.load(log.getId());
 
 
-        List<Long> ret4 = xxlJobLogDao.findClearLogIds(1, 1, new Date(), 100, 100);
+        List<Long> ret4 = xxlJobLogDao.findClearLogIds(1, 1, new Date(), 100, 100, null);
 
         int ret2 = xxlJobLogDao.delete(log.getJobId());
 

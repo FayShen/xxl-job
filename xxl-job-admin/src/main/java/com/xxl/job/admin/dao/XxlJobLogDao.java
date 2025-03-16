@@ -22,14 +22,16 @@ public interface XxlJobLogDao {
 									@Param("jobId") int jobId,
 									@Param("triggerTimeStart") Date triggerTimeStart,
 									@Param("triggerTimeEnd") Date triggerTimeEnd,
-									@Param("logStatus") int logStatus);
+									@Param("logStatus") int logStatus,
+									@Param("namespace") String namespace);
 	public int pageListCount(@Param("offset") int offset,
 							 @Param("pagesize") int pagesize,
 							 @Param("jobGroup") int jobGroup,
 							 @Param("jobId") int jobId,
 							 @Param("triggerTimeStart") Date triggerTimeStart,
 							 @Param("triggerTimeEnd") Date triggerTimeEnd,
-							 @Param("logStatus") int logStatus);
+							 @Param("logStatus") int logStatus,
+							 @Param("namespace") String namespace);
 	
 	public XxlJobLog load(@Param("id") long id);
 
@@ -48,7 +50,8 @@ public interface XxlJobLogDao {
 									  @Param("jobId") int jobId,
 									  @Param("clearBeforeTime") Date clearBeforeTime,
 									  @Param("clearBeforeNum") int clearBeforeNum,
-									  @Param("pagesize") int pagesize);
+									  @Param("pagesize") int pagesize,
+									  @Param("namespace") String namespace);
 	public int clearLog(@Param("logIds") List<Long> logIds);
 
 	public List<Long> findFailJobLogIds(@Param("pagesize") int pagesize);

@@ -24,6 +24,7 @@
 	    <result column="handle_msg" property="handleMsg" />
 
 		<result column="alarm_status" property="alarmStatus" />
+		<result column="namespace" property="namespace" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
@@ -41,7 +42,8 @@
 		t.handle_time,
 		t.handle_code,
 		t.handle_msg,
-		t.alarm_status
+		t.alarm_status,
+		t.namespace
 	</sql>
 	
 	<select id="pageList" resultMap="XxlJobLog">
@@ -72,6 +74,9 @@
 			<if test="logStatus == 3" >
 				AND t.trigger_code = 200
 				AND t.handle_code = 0
+			</if>
+			<if test="namespace != null and namespace.length() > 0">
+				AND t.namespace = #{namespace}
 			</if>
 		</trim>
 		ORDER BY t.trigger_time DESC
@@ -107,6 +112,9 @@
 				AND t.trigger_code = 200
 				AND t.handle_code = 0
 			</if>
+			<if test="namespace != null and namespace.length() > 0">
+				AND t.namespace = #{namespace}
+			</if>
 		</trim>
 	</select>
 	
@@ -123,13 +131,15 @@
 			`job_id`,
 			`trigger_time`,
 			`trigger_code`,
-			`handle_code`
+			`handle_code`,
+			`namespace`
 		) VALUES (
 			#{jobGroup},
 			#{jobId},
 			#{triggerTime},
 			#{triggerCode},
-			#{handleCode}
+			#{handleCode},
+			#{namespace}
 		);
 		<!--<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
 			SELECT LAST_INSERT_ID() 
@@ -188,6 +198,9 @@
 	<select id="findClearLogIds" resultType="long" >
 		SELECT id FROM xxl_job_log
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
+			<if test="namespace != null and namespace.length() > 0">
+				AND xxl_job_log.namespace = #{namespace}
+			</if>
 			<if test="jobGroup gt 0">
 				AND job_group = #{jobGroup}
 			</if>
@@ -202,6 +215,10 @@
 				SELECT id FROM(
 				SELECT id FROM xxl_job_log AS t
 				<trim prefix="WHERE" prefixOverrides="AND | OR" >
+					<if test="namespace != null and namespace.length() > 0">
+						AND t.namespace = #{namespace}
+					</if>
+
 					<if test="jobGroup gt 0">
 						AND t.job_group = #{jobGroup}
 					</if>

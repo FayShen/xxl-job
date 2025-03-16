@@ -6,11 +6,13 @@ import com.xxl.job.admin.core.exception.XxlJobException;
 import com.xxl.job.admin.core.model.XxlJobGroup;
 import com.xxl.job.admin.core.model.XxlJobInfo;
 import com.xxl.job.admin.core.model.XxlJobLog;
+import com.xxl.job.admin.core.model.XxlJobNamespace;
 import com.xxl.job.admin.core.scheduler.XxlJobScheduler;
 import com.xxl.job.admin.core.util.I18nUtil;
 import com.xxl.job.admin.dao.XxlJobGroupDao;
 import com.xxl.job.admin.dao.XxlJobInfoDao;
 import com.xxl.job.admin.dao.XxlJobLogDao;
+import com.xxl.job.admin.dao.XxlJobNamespaceDao;
 import com.xxl.job.core.biz.ExecutorBiz;
 import com.xxl.job.core.biz.model.KillParam;
 import com.xxl.job.core.biz.model.LogParam;
@@ -50,11 +52,23 @@ public class JobLogController {
 	@Resource
 	public XxlJobLogDao xxlJobLogDao;
 
+	@Resource
+	public XxlJobNamespaceDao xxlJobNamespaceDao;
+
 	@RequestMapping
-	public String index(HttpServletRequest request, Model model, @RequestParam(value = "jobId", required = false, defaultValue = "0") Integer jobId) {
+	public String index(HttpServletRequest request, Model model, @RequestParam(value = "jobId", required = false, defaultValue = "0") Integer jobId,
+						@RequestParam(value = "namespace", required = false, defaultValue = "default") String namespace) {
+		if (!StringUtils.hasText(namespace)) {
+			namespace = "default";
+		}
+
+		model.addAttribute("namespace", namespace);
+
+		List<XxlJobNamespace> namespaces = xxlJobNamespaceDao.selectAllNamespace();
+		model.addAttribute("namespaceList", namespaces);
 
 		// 执行器列表
-		List<XxlJobGroup> jobGroupList_all =  xxlJobGroupDao.findAll();
+		List<XxlJobGroup> jobGroupList_all =  xxlJobGroupDao.selectByNamespace(namespace);
 
 		// filter group
 		List<XxlJobGroup> jobGroupList = PermissionInterceptor.filterJobGroupByRole(request, jobGroupList_all);
@@ -95,7 +109,8 @@ public class JobLogController {
 										@RequestParam("jobGroup") int jobGroup,
 										@RequestParam("jobId") int jobId,
 										@RequestParam("logStatus") int logStatus,
-										@RequestParam("filterTime") String filterTime) {
+										@RequestParam("filterTime") String filterTime,
+										@RequestParam("namespace") String namespace) {
 
 		// valid permission
 		PermissionInterceptor.validJobGroupPermission(request, jobGroup);	// 仅管理员支持查询全部；普通用户仅支持查询有权限的 jobGroup
@@ -112,8 +127,8 @@ public class JobLogController {
 		}
 		
 		// page query
-		List<XxlJobLog> list = xxlJobLogDao.pageList(start, length, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus);
-		int list_count = xxlJobLogDao.pageListCount(start, length, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus);
+		List<XxlJobLog> list = xxlJobLogDao.pageList(start, length, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus, namespace);
+		int list_count = xxlJobLogDao.pageListCount(start, length, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus, namespace);
 		
 		// package result
 		Map<String, Object> maps = new HashMap<String, Object>();
@@ -213,7 +228,12 @@ public class JobLogController {
 	public ReturnT<String> clearLog(HttpServletRequest request,
 									@RequestParam("jobGroup") int jobGroup,
 									@RequestParam("jobId") int jobId,
-									@RequestParam("type") int type){
+									@RequestParam("type") int type,
+									@RequestParam("namespace") String namespace){
+		if (!StringUtils.hasText(namespace)) {
+			throw new XxlJobException(I18nUtil.getString("namespace_empty"));
+		}
+
 		// valid permission
 		PermissionInterceptor.validJobGroupPermission(request, jobGroup);
 
@@ -244,7 +264,7 @@ public class JobLogController {
 
 		List<Long> logIds = null;
 		do {
-			logIds = xxlJobLogDao.findClearLogIds(jobGroup, jobId, clearBeforeTime, clearBeforeNum, 1000);
+			logIds = xxlJobLogDao.findClearLogIds(jobGroup, jobId, clearBeforeTime, clearBeforeNum, 1000, namespace);
 			if (logIds!=null && logIds.size()>0) {
 				xxlJobLogDao.clearLog(logIds);
 			}

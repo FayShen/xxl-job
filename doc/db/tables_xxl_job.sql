@@ -34,7 +34,8 @@ CREATE TABLE `xxl_job_info`
     `trigger_last_time`         bigint(13)   NOT NULL DEFAULT '0' COMMENT '上次调度时间',
     `trigger_next_time`         bigint(13)   NOT NULL DEFAULT '0' COMMENT '下次调度时间',
     `namespace`                 varchar(50)  not null comment '命名空间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    index(`namespace`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
@@ -55,11 +56,13 @@ CREATE TABLE `xxl_job_log`
     `handle_code`               int(11)    NOT NULL COMMENT '执行-状态',
     `handle_msg`                text COMMENT '执行-日志',
     `alarm_status`              tinyint(4) NOT NULL DEFAULT '0' COMMENT '告警状态：0-默认、1-无需告警、2-告警成功、3-告警失败',
+    `namespace`                 varchar(50)  not null comment '命名空间',
     PRIMARY KEY (`id`),
     KEY `I_trigger_time` (`trigger_time`),
     KEY `I_handle_code` (`handle_code`),
     KEY `I_jobid_jobgroup` (`job_id`,`job_group`),
-    KEY `I_job_id` (`job_id`)
+    KEY `I_job_id` (`job_id`),
+    index(`namespace`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
@@ -110,7 +113,8 @@ CREATE TABLE `xxl_job_group`
     `address_list` text COMMENT '执行器地址列表，多地址逗号分隔',
     `update_time`  datetime             DEFAULT NULL,
     `namespace`                 varchar(50)  not null comment '命名空间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    index(`namespace`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
@@ -136,17 +140,17 @@ CREATE TABLE `xxl_job_lock`
 
 ## —————————————————————— init data ——————————————————
 
-INSERT INTO `xxl_job_group`(`id`, `app_name`, `title`, `address_type`, `address_list`, `update_time`)
-VALUES (1, 'xxl-job-executor-sample', '示例执行器', 0, NULL, '2018-11-03 22:21:31');
+INSERT INTO `xxl_job_group`(`id`, `app_name`, `title`, `address_type`, `address_list`, `update_time`, `namespace`)
+VALUES (1, 'xxl-job-executor-sample', '示例执行器', 0, NULL, '2018-11-03 22:21:31', 'default');
 
 INSERT INTO `xxl_job_info`(`id`, `job_group`, `job_desc`, `add_time`, `update_time`, `author`, `alarm_email`,
                            `schedule_type`, `schedule_conf`, `misfire_strategy`, `executor_route_strategy`,
                            `executor_handler`, `executor_param`, `executor_block_strategy`, `executor_timeout`,
                            `executor_fail_retry_count`, `glue_type`, `glue_source`, `glue_remark`, `glue_updatetime`,
-                           `child_jobid`)
+                           `child_jobid`, `namespace`)
 VALUES (1, 1, '测试任务1', '2018-11-03 22:21:31', '2018-11-03 22:21:31', 'XXL', '', 'CRON', '0 0 0 * * ? *',
         'DO_NOTHING', 'FIRST', 'demoJobHandler', '', 'SERIAL_EXECUTION', 0, 0, 'BEAN', '', 'GLUE代码初始化',
-        '2018-11-03 22:21:31', '');
+        '2018-11-03 22:21:31', '', 'default');
 
 INSERT INTO `xxl_job_user`(`id`, `username`, `password`, `role`, `permission`)
 VALUES (1, 'admin', 'e10adc3949ba59abbe56e057f20f883e', 1, NULL);

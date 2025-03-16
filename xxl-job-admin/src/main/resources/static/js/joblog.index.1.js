@@ -1,5 +1,11 @@
 $(function() {
 
+	$('#namespaceSelect').on('change', function(){
+		//reload
+		var namespace = $('#namespaceSelect').val();
+		window.location.href = base_url + "/joblog?namespace=" + namespace;
+	});
+
 	// jobGroup change, job list init and select
 	$("#jobGroup").on("change", function () {
 		var jobGroup = $(this).children('option:selected').val();
@@ -83,6 +89,7 @@ $(function() {
 	        	obj.jobId = $('#jobId').val();
                 obj.logStatus = $('#logStatus').val();
 				obj.filterTime = $('#filterTime').val();
+				obj.namespace = $('#namespaceSelect').val();
 	        	obj.start = d.start;
 	        	obj.length = d.length;
                 return obj;
@@ -316,11 +323,15 @@ $(function() {
 		var jobGroupText = $("#jobGroup").find("option:selected").text();
 		var jobIdText = $("#jobId").find("option:selected").text();
 
+		var namespace = $("#namespaceSelect").val();
+
 		$('#clearLogModal input[name=jobGroup]').val(jobGroup);
 		$('#clearLogModal input[name=jobId]').val(jobId);
+		$('#clearLogModal input[name=namespace]').val(namespace);
 
 		$('#clearLogModal .jobGroupText').val(jobGroupText);
 		$('#clearLogModal .jobIdText').val(jobIdText);
+		$('#clearLogModal .namespaceText').val(namespace);
 
 		$('#clearLogModal').modal('show');
 

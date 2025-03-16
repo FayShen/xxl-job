@@ -26,6 +26,18 @@
 		<!-- Main content -->
 	    <section class="content">
 	    	<div class="row">
+
+                <div class="col-xs-2">
+                    <div class="input-group">
+                        <span class="input-group-addon">${I18n.namespace_field_name}</span>
+                        <select class="form-control" id="namespaceSelect" >
+                            <#list namespaceList as row>
+                                <option value="${row.namespace}" <#if namespace == row.namespace>selected</#if> >${row.namespace}</option>
+                            </#list>
+                        </select>
+                    </div>
+                </div>
+
 	    		<div class="col-xs-2">
  					<div class="input-group">
 	                	<span class="input-group-addon">${I18n.jobinfo_field_jobgroup}</span>
@@ -122,6 +134,13 @@
             </div>
             <div class="modal-body">
                 <form class="form-horizontal form" role="form" >
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">${I18n.namespace_field_name}：</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control namespaceText" readonly >
+                            <input type="hidden" name="namespace" >
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">${I18n.jobinfo_field_jobgroup}：</label>
                         <div class="col-sm-9">

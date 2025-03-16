@@ -207,7 +207,7 @@ $(function() {
         window.location.href = base_url + "/jobinfo?jobGroup=" + jobGroup + "&namespace=" + namespace;
     });
 
-	// jobGroup change
+	// namespace change
 	$('#namespaceSelect').on('change', function(){
 		//reload
 		var namespace = $('#namespaceSelect').val();
