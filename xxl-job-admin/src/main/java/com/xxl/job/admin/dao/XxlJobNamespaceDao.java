@@ -14,4 +14,10 @@ public interface XxlJobNamespaceDao {
 
     @Select("select * from xxl_job_namespace where namespace=#{name}")
     XxlJobNamespace selectByName(@Param("name") String name);
+
+    List<XxlJobNamespace> pageList(@Param("name") String name, @Param("offset") int offset, @Param("pageSize") int pageSize);
+
+    int selectCount(@Param("name") String name);
+
+    int insert(XxlJobNamespace namespace);
 }

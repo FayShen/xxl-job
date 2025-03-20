@@ -7,4 +7,27 @@
         select * from xxl_job_namespace
     </select>
 
+    <select id="pageList" resultType="com.xxl.job.admin.core.model.XxlJobNamespace">
+        select * from xxl_job_namespace
+        <where>
+            <if test="name != null and name.length > 0">
+                and namespace like concat('%', #{name}, '%')
+            </if>
+        </where>
+        limit #{offset}, #{pageSize}
+
+    </select>
+
+    <select id="selectCount" resultType="int">
+        select count(*) from xxl_job_namespace
+        <where>
+            <if test="name != null and name.length > 0">
+                and namespace like concat('%', #{name}, '%')
+            </if>
+        </where>
+    </select>
+
+    <insert id="insert">
+        insert into xxl_job_namespace(namespace, description) value (#{namespace}, #{description})
+    </insert>
 </mapper>
