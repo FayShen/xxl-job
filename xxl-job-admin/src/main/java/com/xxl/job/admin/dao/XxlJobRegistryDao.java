@@ -1,6 +1,7 @@
 package com.xxl.job.admin.dao;
 
 import com.xxl.job.admin.core.model.XxlJobRegistry;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -39,5 +40,11 @@ public interface XxlJobRegistryDao {
     public int registryDelete(@Param("registryGroup") String registryGroup,
                           @Param("registryKey") String registryKey,
                           @Param("registryValue") String registryValue);
+
+    /**
+     * 根据namespace删除
+     */
+    @Delete("delete from xxl_job_registry where namespace=#{namespace} ")
+    int deleteByNamespace(String namespace);
 
 }

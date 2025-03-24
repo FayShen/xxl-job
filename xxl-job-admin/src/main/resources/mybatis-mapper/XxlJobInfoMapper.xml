@@ -250,4 +250,7 @@
 		  AND trigger_status = 1
 	</update>
 
+	<select id="countByNamespace" resultType="int">
+		select count(*) from xxl_job_info where namespace = #{namespace}
+	</select>
 </mapper>

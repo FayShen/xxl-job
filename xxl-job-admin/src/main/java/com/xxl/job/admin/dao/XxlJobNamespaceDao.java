@@ -1,6 +1,7 @@
 package com.xxl.job.admin.dao;
 
 import com.xxl.job.admin.core.model.XxlJobNamespace;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -20,4 +21,10 @@ public interface XxlJobNamespaceDao {
     int selectCount(@Param("name") String name);
 
     int insert(XxlJobNamespace namespace);
+
+    @Select("select * from xxl_job_namespace where id=#{id}")
+    XxlJobNamespace selectById(Long id);
+
+    @Delete("delete from xxl_job_namespace where id=#{id} ")
+    int deleteById(Long id);
 }

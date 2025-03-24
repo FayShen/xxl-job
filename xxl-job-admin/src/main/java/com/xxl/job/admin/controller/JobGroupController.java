@@ -198,16 +198,16 @@ public class JobGroupController {
 	@RequestMapping("/remove")
 	@ResponseBody
 	@PermissionLimit(adminuser = true)
-	public ReturnT<String> remove(@RequestParam("id") int id){
+	public ReturnT<String> remove(@RequestParam("id") int id, @RequestParam(value = "namespace", defaultValue = "default") String namespace){
 
 		// valid
-		int count = xxlJobInfoDao.pageListCount(0, 10, id, -1,  null, null, null, null);
+		int count = xxlJobInfoDao.pageListCount(0, 10, id, -1,  null, null, null, namespace);
 		if (count > 0) {
 			return new ReturnT<String>(500, I18nUtil.getString("jobgroup_del_limit_0") );
 		}
 
 		int countSameSpace = xxlJobGroupDao.selectCountOfNamespaceById(id);
-		if (countSameSpace == 1) {
+		if (countSameSpace == 0) {
 			return new ReturnT<String>(500, I18nUtil.getString("jobgroup_del_limit_1") );
 		}
 

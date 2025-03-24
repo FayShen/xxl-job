@@ -99,8 +99,10 @@ CREATE TABLE `xxl_job_registry`
     `registry_key`   varchar(255) NOT NULL,
     `registry_value` varchar(255) NOT NULL,
     `update_time`    datetime DEFAULT NULL,
+    `namespace`                 varchar(50)  not null comment '命名空间',
     PRIMARY KEY (`id`),
-    UNIQUE KEY `i_g_k_v` (`registry_group`, `registry_key`, `registry_value`) USING BTREE
+    index(`namespace`),
+    UNIQUE KEY `i_g_k_v` (`namespace`, `registry_group`, `registry_key`, `registry_value`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 

@@ -38,7 +38,7 @@
                 </div>
 
                 <div class="col-xs-1">
-                    <button class="btn btn-block btn-default" id="add">${I18n.namespace_add}</button>
+                    <button class="btn btn-block btn-success" id="add">${I18n.namespace_add}</button>
                 </div>
             </div>
 
@@ -52,6 +52,7 @@
                                     <th name="id" >id</th>
                                     <th name="namespace" >namespace</th>
                                     <th name="description" >description</th>
+                                    <th>操作</th>
                                 </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -61,6 +62,49 @@
                 </div>
             </div>
         </section>
+    </div>
+
+    <!-- namespace新增.模态框 -->
+    <div class="modal fade" id="addModal" tabindex="-1" role="dialog"  aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" >${I18n.jobinfo_field_add}</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal form" role="form" >
+
+                        <p style="margin: 0 0 10px;text-align: left;border-bottom: 1px solid #e5e5e5;color: gray;">${I18n.jobinfo_conf_base}</p>    <#-- 基础信息 -->
+                        <div class="form-group">
+                            <label for="firstname" class="col-sm-2 control-label">${I18n.namespace_field_name}<font color="red">*</font></label>
+                            <div class="col-sm-4">
+
+                                    <input type="text" name="namespace"/>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="firstname" class="col-sm-2 control-label">description</label>
+                            <div class="col-sm-4">
+
+                                    <textarea name="description"></textarea>
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-3 col-sm-6">
+                                <button type="submit" class="btn btn-primary"  >${I18n.system_save}</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">${I18n.system_cancel}</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- footer -->

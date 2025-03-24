@@ -1,5 +1,6 @@
 $(function () {
 
+    var tableData = {};
     var tableList = $("#namespace_list").dataTable({
         "deferRender": true,
         "processing" : true,
@@ -28,6 +29,22 @@ $(function () {
             {
                 "data": 'description',
                 "width":'20%'
+            },
+            {
+                "data": 'operation' ,
+                "width":'15%',
+                "render": function ( data, type, row ) {
+                    return function(){
+                        // html
+                        tableData['key'+row.id] = row;
+                        var html = '<p id="'+ row.id +'" >'+
+                            '<button class="btn btn-warning btn-xs update" type="button">'+ I18n.system_opt_edit +'</button>  '+
+                            '<button class="btn btn-danger btn-xs delete" type="button">'+ I18n.system_opt_del +'</button>  '+
+                            '</p>';
+
+                        return html;
+                    };
+                }
             }
         ],
         "language" : {
@@ -56,9 +73,120 @@ $(function () {
         }
     })
 
+    // 刪除 operate
+    $("#namespace_list").on('click', '.delete',function() {
+        var id = $(this).parent('p').attr("id");
+
+        layer.confirm( I18n.system_ok + I18n.system_opt_del + '?', {
+            icon: 3,
+            title: I18n.system_tips ,
+            btn: [ I18n.system_ok, I18n.system_cancel ]
+        }, function(index){
+            layer.close(index);
+
+            $.ajax({
+                type : 'POST',
+                url : base_url + "/namespace/remove",
+                data : {
+                    "id" : id
+                },
+                dataType : "json",
+                success : function(data){
+                    if (data.code == 200) {
+                        layer.msg( I18n.system_success );
+                        tableList.fnDraw(false);
+                    } else {
+                        layer.msg( data.msg || I18n.system_opt_del + I18n.system_fail );
+                    }
+                }
+            });
+        });
+    });
+
     // search Btn
     $("#searchBtn").on('click', function(){
         tableList.fnDraw();
+    });
+
+    $("#add").click(function(){
+
+        $('#addModal').modal({backdrop: false, keyboard: false}).modal('show');
+    });
+
+    var addModalValidate = $("#addModal .form").validate({
+        errorElement : 'span',
+        errorClass : 'help-block',
+        focusInvalid : true,
+        rules : {
+            namespace : {
+                required : true,
+                maxlength: 50
+            },
+            description : {
+                required : false,
+                maxlength: 500
+            }/*,
+            executorTimeout : {
+                digits:true
+            },
+            executorFailRetryCount : {
+                digits:true
+            }*/
+        },
+        messages : {
+            namespace : {
+                required : 'namespace can\'t be blank'
+            },
+            description : {
+                rangelength: 'max 500'
+
+            }/*,
+            executorTimeout : {
+                digits: I18n.system_please_input + I18n.system_digits
+            },
+            executorFailRetryCount : {
+                digits: I18n.system_please_input + I18n.system_digits
+            }*/
+        },
+        highlight : function(element) {
+            $(element).closest('.form-group').addClass('has-error');
+        },
+        success : function(label) {
+            label.closest('.form-group').removeClass('has-error');
+            label.remove();
+        },
+        errorPlacement : function(error, element) {
+            element.parent('div').append(error);
+        },
+        submitHandler : function(form) {
+            $.post(base_url + "/namespace/add",  $("#addModal .form").serialize(), function(data, status) {
+                if (data.code == "200") {
+                    $('#addModal').modal('hide');
+                    layer.open({
+                        title: I18n.system_tips ,
+                        btn: [ I18n.system_ok ],
+                        content: I18n.system_add_suc ,
+                        icon: '1',
+                        end: function(layero, index){
+                            tableList.fnDraw();
+                        }
+                    });
+                } else {
+                    layer.open({
+                        title: I18n.system_tips ,
+                        btn: [ I18n.system_ok ],
+                        content: (data.msg || I18n.system_add_fail),
+                        icon: '2'
+                    });
+                }
+            });
+        }
+    });
+
+    $("#addModal").on('hide.bs.modal', function () {
+        addModalValidate.resetForm();
+        $("#addModal .form")[0].reset();
+        $("#addModal .form .form-group").removeClass("has-error");
     });
 
 

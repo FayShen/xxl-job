@@ -13,6 +13,16 @@ public class XxlJobRegistry {
     private String registryValue;
     private Date updateTime;
 
+    private String namespace;
+
+    public String getNamespace() {
+        return namespace;
+    }
+
+    public void setNamespace(String namespace) {
+        this.namespace = namespace;
+    }
+
     public int getId() {
         return id;
     }

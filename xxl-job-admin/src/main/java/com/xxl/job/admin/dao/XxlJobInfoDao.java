@@ -63,5 +63,12 @@ public interface XxlJobInfoDao {
 	 */
 	public int scheduleUpdate(XxlJobInfo xxlJobInfo);
 
+	/**
+	 * 根据namespace统计数量
+	 * @param namespace namespace
+	 * @return int
+	 */
+	int countByNamespace(String namespace);
+
 
 }

@@ -160,7 +160,7 @@ $(function() {
 	// opt_del
 	$("#jobgroup_list").on('click', '.opt_del',function() {
 		var id = $(this).parents('ul').attr("_id");
-
+		var namespace = $("#namespace_p").html();
 		layer.confirm( (I18n.system_ok + I18n.jobgroup_del + '？') , {
 			icon: 3,
 			title: I18n.system_tips ,
@@ -171,7 +171,7 @@ $(function() {
 			$.ajax({
 				type : 'POST',
 				url : base_url + '/jobgroup/remove',
-				data : {"id":id},
+				data : {"id":id, "namespace": namespace},
 				dataType : "json",
 				success : function(data){
 					if (data.code == 200) {

@@ -9,6 +9,7 @@
 	    <result column="registry_key" property="registryKey" />
 	    <result column="registry_value" property="registryValue" />
 		<result column="update_time" property="updateTime" />
+		<result column="namespace" property="namespace" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
@@ -16,7 +17,8 @@
 		t.registry_group,
 		t.registry_key,
 		t.registry_value,
-		t.update_time
+		t.update_time,
+		t.namespace
 	</sql>
 
 	<select id="findDead" parameterType="java.util.HashMap" resultType="java.lang.Integer" >
@@ -40,8 +42,8 @@
 	</select>
 
 	<insert id="registrySaveOrUpdate" >
-		INSERT INTO xxl_job_registry( `registry_group` , `registry_key` , `registry_value`, `update_time`)
-		VALUES( #{registryGroup}  , #{registryKey} , #{registryValue}, #{updateTime})
+		INSERT INTO xxl_job_registry( `registry_group` , `registry_key` , `registry_value`, `update_time`, `namespace`)
+		VALUES( #{registryGroup}  , #{registryKey} , #{registryValue}, #{updateTime}, #{namespace})
 		ON DUPLICATE KEY UPDATE
 			`update_time` = #{updateTime}
 	</insert>

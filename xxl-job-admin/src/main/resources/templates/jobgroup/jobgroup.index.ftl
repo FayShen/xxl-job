@@ -13,7 +13,8 @@
 	<@netCommon.commonHeader />
 	<!-- left -->
 	<@netCommon.commonLeft "jobgroup" />
-	
+
+    <p hidden="hidden" id="namespace_p">${namespace}</p>
 	<!-- Content Wrapper. Contains page content -->
 	<div class="content-wrapper">
 		<!-- Content Header (Page header) -->

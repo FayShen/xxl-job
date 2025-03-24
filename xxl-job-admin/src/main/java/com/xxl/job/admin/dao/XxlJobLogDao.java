@@ -1,6 +1,7 @@
 package com.xxl.job.admin.dao;
 
 import com.xxl.job.admin.core.model.XxlJobLog;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -61,5 +62,13 @@ public interface XxlJobLogDao {
 								 @Param("newAlarmStatus") int newAlarmStatus);
 
 	public List<Long> findLostJobIds(@Param("losedTime") Date losedTime);
+
+	/**
+	 * 删除命名空间下任务
+	 * @param namespace 命名空间
+	 * @return int
+	 */
+	@Delete("delete from xxl_job_log where namespace=#{namespace}")
+	int deleteByNamespace(String namespace);
 
 }

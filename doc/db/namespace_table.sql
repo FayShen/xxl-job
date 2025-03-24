@@ -26,3 +26,14 @@ update xxl_job_group set namespace = "default" where namespace is null or namesp
 alter table xxl_job_log add column namespace varchar(50) not null comment '命名空间';
 alter table xxl_job_log add index(`namespace`);
 update xxl_job_log set namespace = "default" where namespace is null or namespace = '';
+
+alter table xxl_job_registry add column namespace varchar(50) not null comment '命名空间';
+alter table xxl_job_registry add index(`namespace`);
+update xxl_job_registry set namespace = "default" where namespace is null or namespace = '';
+
+alter table xxl_job_registry
+    drop key i_g_k_v;
+
+alter table xxl_job_registry
+    add constraint i_g_k_v
+        unique (namespace, registry_group, registry_key, registry_value);

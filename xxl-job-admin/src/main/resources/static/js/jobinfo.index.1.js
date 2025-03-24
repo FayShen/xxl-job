@@ -250,7 +250,8 @@ $(function() {
 				type : 'POST',
 				url : url,
 				data : {
-					"id" : id
+					"id" : id,
+					"namespace": $("#namespace_p").html()
 				},
 				dataType : "json",
 				success : function(data){
