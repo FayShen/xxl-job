@@ -25,6 +25,15 @@ public class TriggerParam implements Serializable{
     private int broadcastIndex;
     private int broadcastTotal;
 
+    private String namespace;
+
+    public String getNamespace() {
+        return namespace;
+    }
+
+    public void setNamespace(String namespace) {
+        this.namespace = namespace;
+    }
 
     public int getJobId() {
         return jobId;

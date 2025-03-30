@@ -89,6 +89,9 @@ public class XxlJobAdminConfig implements InitializingBean, DisposableBean {
     @Resource
     private JobAlarmer jobAlarmer;
 
+    @Resource
+    private XxlJobNamespaceDao xxlJobNamespaceDao;
+
 
     public String getI18n() {
         if (!Arrays.asList("zh_CN", "zh_TC", "en").contains(i18n)) {
@@ -162,4 +165,7 @@ public class XxlJobAdminConfig implements InitializingBean, DisposableBean {
         return jobAlarmer;
     }
 
+    public XxlJobNamespaceDao getXxlJobNamespaceDao() {
+        return xxlJobNamespaceDao;
+    }
 }

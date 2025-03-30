@@ -107,6 +107,50 @@
         </div>
     </div>
 
+
+    <!-- namespace编辑.模态框 -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog"  aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" >${I18n.jobinfo_field_add}</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal form" role="form" >
+                        <input name="id" hidden="hidden"/>
+                        <p style="margin: 0 0 10px;text-align: left;border-bottom: 1px solid #e5e5e5;color: gray;">${I18n.jobinfo_conf_base}</p>    <#-- 基础信息 -->
+                        <div class="form-group">
+                            <label for="firstname" class="col-sm-2 control-label">${I18n.namespace_field_name}<font color="red">*</font></label>
+                            <div class="col-sm-4">
+
+                                <input type="text" name="namespace" disabled/>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="firstname" class="col-sm-2 control-label">description</label>
+                            <div class="col-sm-4">
+
+                                <textarea name="description"></textarea>
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-3 col-sm-6">
+                                <button type="submit" class="btn btn-primary"  >${I18n.system_save}</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">${I18n.system_cancel}</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- footer -->
     <@netCommon.commonFooter />
 </div>

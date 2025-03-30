@@ -44,7 +44,7 @@ public class FrameLessXxlJobConfig {
         xxlJobExecutor.setPort(Integer.valueOf(xxlJobProp.getProperty("xxl.job.executor.port")));
         xxlJobExecutor.setLogPath(xxlJobProp.getProperty("xxl.job.executor.logpath"));
         xxlJobExecutor.setLogRetentionDays(Integer.valueOf(xxlJobProp.getProperty("xxl.job.executor.logretentiondays")));
-
+        xxlJobExecutor.setNamespace(xxlJobProp.getProperty("xxl.job.executor.namespace"));
         // registry job bean
         xxlJobExecutor.setXxlJobBeanList(Arrays.asList(new SampleXxlJob()));
 

@@ -33,7 +33,7 @@ public class EmbedServer {
     private ExecutorBiz executorBiz;
     private Thread thread;
 
-    public void start(final String address, final int port, final String appname, final String accessToken) {
+    public void start(final String address, final int port, final String appname, final String accessToken, final String namespace) {
         executorBiz = new ExecutorBizImpl();
         thread = new Thread(new Runnable() {
             @Override
@@ -82,7 +82,7 @@ public class EmbedServer {
                     logger.info(">>>>>>>>>>> xxl-job remoting server start success, nettype = {}, port = {}", EmbedServer.class, port);
 
                     // start registry
-                    startRegistry(appname, address);
+                    startRegistry(namespace, appname, address);
 
                     // wait util stop
                     future.channel().closeFuture().sync();
@@ -244,9 +244,9 @@ public class EmbedServer {
 
     // ---------------------- registry ----------------------
 
-    public void startRegistry(final String appname, final String address) {
+    public void startRegistry(final String namespace, final String appname, final String address) {
         // start registry
-        ExecutorRegistryThread.getInstance().start(appname, address);
+        ExecutorRegistryThread.getInstance().start(namespace, appname, address);
     }
 
     public void stopRegistry() {

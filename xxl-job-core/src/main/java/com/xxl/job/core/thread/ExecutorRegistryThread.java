@@ -23,7 +23,7 @@ public class ExecutorRegistryThread {
 
     private Thread registryThread;
     private volatile boolean toStop = false;
-    public void start(final String appname, final String address){
+    public void start(final String namespace, final String appname, final String address){
 
         // valid
         if (appname==null || appname.trim().length()==0) {
@@ -42,7 +42,7 @@ public class ExecutorRegistryThread {
                 // registry
                 while (!toStop) {
                     try {
-                        RegistryParam registryParam = new RegistryParam(RegistryConfig.RegistType.EXECUTOR.name(), appname, address);
+                        RegistryParam registryParam = new RegistryParam(RegistryConfig.RegistType.EXECUTOR.name(), appname, address, namespace);
                         for (AdminBiz adminBiz: XxlJobExecutor.getAdminBizList()) {
                             try {
                                 ReturnT<String> registryResult = adminBiz.registry(registryParam);
@@ -78,7 +78,7 @@ public class ExecutorRegistryThread {
 
                 // registry remove
                 try {
-                    RegistryParam registryParam = new RegistryParam(RegistryConfig.RegistType.EXECUTOR.name(), appname, address);
+                    RegistryParam registryParam = new RegistryParam(RegistryConfig.RegistType.EXECUTOR.name(), appname, address, namespace);
                     for (AdminBiz adminBiz: XxlJobExecutor.getAdminBizList()) {
                         try {
                             ReturnT<String> registryResult = adminBiz.registryRemove(registryParam);

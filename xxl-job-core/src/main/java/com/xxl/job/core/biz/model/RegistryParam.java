@@ -12,11 +12,14 @@ public class RegistryParam implements Serializable {
     private String registryKey;
     private String registryValue;
 
+    private String namespace;
+
     public RegistryParam(){}
-    public RegistryParam(String registryGroup, String registryKey, String registryValue) {
+    public RegistryParam(String registryGroup, String registryKey, String registryValue, String namespace) {
         this.registryGroup = registryGroup;
         this.registryKey = registryKey;
         this.registryValue = registryValue;
+        this.namespace = namespace;
     }
 
     public String getRegistryGroup() {
@@ -49,6 +52,15 @@ public class RegistryParam implements Serializable {
                 "registryGroup='" + registryGroup + '\'' +
                 ", registryKey='" + registryKey + '\'' +
                 ", registryValue='" + registryValue + '\'' +
+                ", namespace='" + namespace + '\'' +
                 '}';
+    }
+
+    public String getNamespace() {
+        return namespace;
+    }
+
+    public void setNamespace(String namespace) {
+        this.namespace = namespace;
     }
 }

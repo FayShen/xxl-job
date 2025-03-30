@@ -25,7 +25,8 @@ public interface XxlJobRegistryDao {
     public int registrySaveOrUpdate(@Param("registryGroup") String registryGroup,
                             @Param("registryKey") String registryKey,
                             @Param("registryValue") String registryValue,
-                            @Param("updateTime") Date updateTime);
+                            @Param("updateTime") Date updateTime,
+                                    @Param("namespace") String namespace);
 
     /*public int registryUpdate(@Param("registryGroup") String registryGroup,
                               @Param("registryKey") String registryKey,
@@ -39,7 +40,8 @@ public interface XxlJobRegistryDao {
 
     public int registryDelete(@Param("registryGroup") String registryGroup,
                           @Param("registryKey") String registryKey,
-                          @Param("registryValue") String registryValue);
+                          @Param("registryValue") String registryValue,
+                              @Param("namespace") String namespace);
 
     /**
      * 根据namespace删除

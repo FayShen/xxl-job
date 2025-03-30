@@ -115,11 +115,13 @@ public class XxlJobTrigger {
         ExecutorRouteStrategyEnum executorRouteStrategyEnum = ExecutorRouteStrategyEnum.match(jobInfo.getExecutorRouteStrategy(), null);    // route strategy
         String shardingParam = (ExecutorRouteStrategyEnum.SHARDING_BROADCAST==executorRouteStrategyEnum)?String.valueOf(index).concat("/").concat(String.valueOf(total)):null;
 
+        String namespace = jobInfo.getNamespace();
         // 1、save log-id
         XxlJobLog jobLog = new XxlJobLog();
         jobLog.setJobGroup(jobInfo.getJobGroup());
         jobLog.setJobId(jobInfo.getId());
         jobLog.setTriggerTime(new Date());
+        jobLog.setNamespace(namespace);
         XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().save(jobLog);
         logger.debug(">>>>>>>>>>> xxl-job trigger start, jobId:{}", jobLog.getId());
 
@@ -137,6 +139,7 @@ public class XxlJobTrigger {
         triggerParam.setGlueUpdatetime(jobInfo.getGlueUpdatetime().getTime());
         triggerParam.setBroadcastIndex(index);
         triggerParam.setBroadcastTotal(total);
+        triggerParam.setNamespace(namespace);
 
         // 3、init address
         String address = null;

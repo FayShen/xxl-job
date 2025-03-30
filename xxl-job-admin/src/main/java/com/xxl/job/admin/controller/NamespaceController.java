@@ -112,5 +112,14 @@ public class NamespaceController {
         xxlJobNamespaceDao.deleteById(id);
         return ReturnT.SUCCESS;
     }
+
+    @ResponseBody
+    @PostMapping("update")
+    @Transactional
+    public ReturnT<String> update(@RequestParam("id") Long id, @RequestParam(value = "description", required = false) String description) {
+        xxlJobNamespaceDao.updateById(id, description);
+        return ReturnT.SUCCESS;
+    }
+
     //TODO job group为什么不需要唯一索引
 }

@@ -18,7 +18,7 @@ public class XxlJobRegistryDaoTest {
 
     @Test
     public void test(){
-        int ret = xxlJobRegistryDao.registrySaveOrUpdate("g1", "k1", "v1", new Date());
+        int ret = xxlJobRegistryDao.registrySaveOrUpdate("g1", "k1", "v1", new Date(), "default");
         /*int ret = xxlJobRegistryDao.registryUpdate("g1", "k1", "v1", new Date());
         if (ret < 1) {
             ret = xxlJobRegistryDao.registrySave("g1", "k1", "v1", new Date());
@@ -33,7 +33,7 @@ public class XxlJobRegistryDaoTest {
     public void test2() throws InterruptedException {
         for (int i = 0; i < 100; i++) {
             new Thread(()->{
-                int ret = xxlJobRegistryDao.registrySaveOrUpdate("g1", "k1", "v1", new Date());
+                int ret = xxlJobRegistryDao.registrySaveOrUpdate("g1", "k1", "v1", new Date(), "default");
                 System.out.println(ret);
 
                 /*int ret = xxlJobRegistryDao.registryUpdate("g1", "k1", "v1", new Date());

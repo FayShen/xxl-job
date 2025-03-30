@@ -2,6 +2,7 @@ package com.xxl.job.admin.core.thread;
 
 import com.xxl.job.admin.core.conf.XxlJobAdminConfig;
 import com.xxl.job.admin.core.model.XxlJobGroup;
+import com.xxl.job.admin.core.model.XxlJobNamespace;
 import com.xxl.job.admin.core.model.XxlJobRegistry;
 import com.xxl.job.core.biz.model.RegistryParam;
 import com.xxl.job.core.biz.model.ReturnT;
@@ -75,7 +76,9 @@ public class JobRegistryHelper {
 								for (XxlJobRegistry item: list) {
 									if (RegistryConfig.RegistType.EXECUTOR.name().equals(item.getRegistryGroup())) {
 										String appname = item.getRegistryKey();
-										List<String> registryList = appAddressMap.get(appname);
+										String namespace = item.getNamespace();
+										String key = namespace + "-" + appname;
+										List<String> registryList = appAddressMap.get(key);
 										if (registryList == null) {
 											registryList = new ArrayList<String>();
 										}
@@ -83,14 +86,17 @@ public class JobRegistryHelper {
 										if (!registryList.contains(item.getRegistryValue())) {
 											registryList.add(item.getRegistryValue());
 										}
-										appAddressMap.put(appname, registryList);
+										appAddressMap.put(key, registryList);
 									}
 								}
 							}
 
 							// fresh group address
 							for (XxlJobGroup group: groupList) {
-								List<String> registryList = appAddressMap.get(group.getAppname());
+								String appname = group.getAppname();
+								String namespace = group.getNamespace();
+								String key = namespace + "-" + appname;
+								List<String> registryList = appAddressMap.get(key);
 								String addressListStr = null;
 								if (registryList!=null && !registryList.isEmpty()) {
 									Collections.sort(registryList);
@@ -151,7 +157,8 @@ public class JobRegistryHelper {
 		// valid
 		if (!StringUtils.hasText(registryParam.getRegistryGroup())
 				|| !StringUtils.hasText(registryParam.getRegistryKey())
-				|| !StringUtils.hasText(registryParam.getRegistryValue())) {
+				|| !StringUtils.hasText(registryParam.getRegistryValue())
+				|| !StringUtils.hasText(registryParam.getNamespace())) {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, "Illegal Argument.");
 		}
 
@@ -160,7 +167,7 @@ public class JobRegistryHelper {
 			@Override
 			public void run() {
 				// 0-fail; 1-save suc; 2-update suc;
-				int ret = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().registrySaveOrUpdate(registryParam.getRegistryGroup(), registryParam.getRegistryKey(), registryParam.getRegistryValue(), new Date());
+				int ret = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().registrySaveOrUpdate(registryParam.getRegistryGroup(), registryParam.getRegistryKey(), registryParam.getRegistryValue(), new Date(), registryParam.getNamespace());
 				if (ret == 1) {
 					// fresh (add)
 					freshGroupRegistryInfo(registryParam);
@@ -183,7 +190,8 @@ public class JobRegistryHelper {
 		// valid
 		if (!StringUtils.hasText(registryParam.getRegistryGroup())
 				|| !StringUtils.hasText(registryParam.getRegistryKey())
-				|| !StringUtils.hasText(registryParam.getRegistryValue())) {
+				|| !StringUtils.hasText(registryParam.getRegistryValue())
+				|| !StringUtils.hasText(registryParam.getNamespace())) {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, "Illegal Argument.");
 		}
 
@@ -191,7 +199,7 @@ public class JobRegistryHelper {
 		registryOrRemoveThreadPool.execute(new Runnable() {
 			@Override
 			public void run() {
-				int ret = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().registryDelete(registryParam.getRegistryGroup(), registryParam.getRegistryKey(), registryParam.getRegistryValue());
+				int ret = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().registryDelete(registryParam.getRegistryGroup(), registryParam.getRegistryKey(), registryParam.getRegistryValue(), registryParam.getNamespace());
 				if (ret > 0) {
 					// fresh (delete)
 					freshGroupRegistryInfo(registryParam);

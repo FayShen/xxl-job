@@ -68,6 +68,7 @@
 		WHERE registry_group = #{registryGroup}
 			AND registry_key = #{registryKey}
 			AND registry_value = #{registryValue}
+			AND namespace = #{namespace}
 	</delete>
 
 </mapper>

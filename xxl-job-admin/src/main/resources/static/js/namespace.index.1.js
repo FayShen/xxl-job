@@ -103,6 +103,17 @@ $(function () {
         });
     });
 
+    $("#namespace_list").on('click', '.update',function() {
+        console.log("click update");
+        $('#editModal').modal({backdrop: false, keyboard: false}).modal('show');
+        var id = $(this).parent('p').attr("id");
+        var rowData = tableData['key' + id];
+        console.log(rowData);
+        $("#editModal .form input[name='id']").val(rowData.id);
+        $("#editModal .form input[name='namespace']").val(rowData.namespace);
+        $("#editModal .form textarea[name='description']").val(rowData.description);
+    });
+
     // search Btn
     $("#searchBtn").on('click', function(){
         tableList.fnDraw();
@@ -183,10 +194,83 @@ $(function () {
         }
     });
 
+
+    var editModalValidate = $("#editModal .form").validate({
+        errorElement : 'span',
+        errorClass : 'help-block',
+        focusInvalid : true,
+        rules : {
+            description : {
+                required : false,
+                maxlength: 500
+            }/*,
+            executorTimeout : {
+                digits:true
+            },
+            executorFailRetryCount : {
+                digits:true
+            }*/
+        },
+        messages : {
+            namespace : {
+                required : 'namespace can\'t be blank'
+            },
+            description : {
+                rangelength: 'max 500'
+
+            }/*,
+            executorTimeout : {
+                digits: I18n.system_please_input + I18n.system_digits
+            },
+            executorFailRetryCount : {
+                digits: I18n.system_please_input + I18n.system_digits
+            }*/
+        },
+        highlight : function(element) {
+            $(element).closest('.form-group').addClass('has-error');
+        },
+        success : function(label) {
+            label.closest('.form-group').removeClass('has-error');
+            label.remove();
+        },
+        errorPlacement : function(error, element) {
+            element.parent('div').append(error);
+        },
+        submitHandler : function(form) {
+            $.post(base_url + "/namespace/update",  $("#editModal .form").serialize(), function(data, status) {
+                if (data.code == "200") {
+                    $('#editModal').modal('hide');
+                    layer.open({
+                        title: I18n.system_tips ,
+                        btn: [ I18n.system_ok ],
+                        content: I18n.system_update_suc ,
+                        icon: '1',
+                        end: function(layero, index){
+                            tableList.fnDraw();
+                        }
+                    });
+                } else {
+                    layer.open({
+                        title: I18n.system_tips ,
+                        btn: [ I18n.system_ok ],
+                        content: (data.msg || I18n.system_add_fail),
+                        icon: '2'
+                    });
+                }
+            });
+        }
+    });
+
     $("#addModal").on('hide.bs.modal', function () {
         addModalValidate.resetForm();
         $("#addModal .form")[0].reset();
         $("#addModal .form .form-group").removeClass("has-error");
+    });
+
+    $("#editModal").on('hide.bs.modal', function () {
+        editModalValidate.resetForm();
+        $("#editModal .form")[0].reset();
+        $("#editModal .form .form-group").removeClass("has-error");
     });
 
 

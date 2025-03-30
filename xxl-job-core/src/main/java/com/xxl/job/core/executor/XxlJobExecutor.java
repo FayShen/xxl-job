@@ -39,6 +39,8 @@ public class XxlJobExecutor  {
     private String logPath;
     private int logRetentionDays;
 
+    private String namespace;
+
     public void setAdminAddresses(String adminAddresses) {
         this.adminAddresses = adminAddresses;
     }
@@ -85,7 +87,7 @@ public class XxlJobExecutor  {
         TriggerCallbackThread.getInstance().start();
 
         // init executor-server
-        initEmbedServer(address, ip, port, appname, accessToken);
+        initEmbedServer(address, ip, port, appname, accessToken, namespace);
     }
 
     public void destroy(){
@@ -144,7 +146,7 @@ public class XxlJobExecutor  {
     // ---------------------- executor-server (rpc provider) ----------------------
     private EmbedServer embedServer = null;
 
-    private void initEmbedServer(String address, String ip, int port, String appname, String accessToken) throws Exception {
+    private void initEmbedServer(String address, String ip, int port, String appname, String accessToken, String namespace) throws Exception {
 
         // fill ip port
         port = port>0?port: NetUtil.findAvailablePort(9999);
@@ -163,7 +165,7 @@ public class XxlJobExecutor  {
 
         // start
         embedServer = new EmbedServer();
-        embedServer.start(address, port, appname, accessToken);
+        embedServer.start(address, port, appname, accessToken, namespace);
     }
 
     private void stopEmbedServer() {
@@ -271,5 +273,13 @@ public class XxlJobExecutor  {
 
     public static JobThread loadJobThread(int jobId){
         return jobThreadRepository.get(jobId);
+    }
+
+    public String getNamespace() {
+        return namespace;
+    }
+
+    public void setNamespace(String namespace) {
+        this.namespace = namespace;
     }
 }
