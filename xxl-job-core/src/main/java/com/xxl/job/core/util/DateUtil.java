@@ -143,6 +143,10 @@ public class DateUtil {
         return add(date, Calendar.MINUTE, amount);
     }
 
+    public static Date addSeconds(final Date date, final int amount) {
+        return add(date, Calendar.SECOND, amount);
+    }
+
     private static Date add(final Date date, final int calendarField, final int amount) {
         if (date == null) {
             return null;
@@ -151,6 +155,14 @@ public class DateUtil {
         c.setTime(date);
         c.add(calendarField, amount);
         return c.getTime();
+    }
+
+    public static void main(String[] args) {
+        Date date = new Date();
+        System.out.println(format(date, "yyyy-MM-dd HH:mm:ss"));
+        System.out.println(format(DateUtil.addSeconds(date, -10), "yyyy-MM-dd HH:mm:ss"));
+        System.out.println(format(DateUtil.addSeconds(date, -6), "yyyy-MM-dd HH:mm:ss"));
+        System.out.println(format(DateUtil.addSeconds(date, 8), "yyyy-MM-dd HH:mm:ss"));
     }
 
 }

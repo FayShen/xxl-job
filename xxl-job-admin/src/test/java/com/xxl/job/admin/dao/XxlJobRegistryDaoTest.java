@@ -1,6 +1,8 @@
 package com.xxl.job.admin.dao;
 
 import com.xxl.job.admin.core.model.XxlJobRegistry;
+import com.xxl.job.core.enums.RegistryConfig;
+import com.xxl.job.core.util.DateUtil;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,7 +26,7 @@ public class XxlJobRegistryDaoTest {
             ret = xxlJobRegistryDao.registrySave("g1", "k1", "v1", new Date());
         }*/
 
-        List<XxlJobRegistry> list = xxlJobRegistryDao.findAll(1, new Date());
+        List<XxlJobRegistry> list = xxlJobRegistryDao.findAll(DateUtil.addSeconds(new Date(), -1));
 
         int ret2 = xxlJobRegistryDao.removeDead(Arrays.asList(1));
     }

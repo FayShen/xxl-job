@@ -1,12 +1,14 @@
 package com.xxl.job.admin.dao;
 
 import com.xxl.job.admin.core.model.XxlJobLog;
+import com.xxl.job.core.util.DateUtil;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class XxlJobLogDaoTest {
@@ -47,6 +49,13 @@ public class XxlJobLogDaoTest {
 
         int ret2 = xxlJobLogDao.delete(log.getJobId());
 
+    }
+
+    @Test
+    public void testFindLogReport() {
+        Map<String, Object> logReport =
+                xxlJobLogDao.findLogReport(DateUtil.addDays(new Date(), -1), new Date());
+        System.out.println(logReport);
     }
 
 }
