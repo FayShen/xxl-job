@@ -33,7 +33,7 @@ public interface XxlJobRegistryDao {
         try {
             return registrySave(registryGroup, registryKey, registryValue, updateTime);
         } catch (DuplicateKeyException ex) {
-            log.warn("DuplicateKeyException registryGroup={},registryKey={},registryValue={},updateTime={}",
+            log.debug("DuplicateKeyException registryGroup={},registryKey={},registryValue={},updateTime={}",
                     registryGroup, registryKey, registryValue, updateTime);
             return registryUpdate(registryGroup, registryKey, registryValue, updateTime);
         }
